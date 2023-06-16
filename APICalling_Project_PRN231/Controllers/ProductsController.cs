@@ -62,8 +62,29 @@ namespace APICalling_Project_PRN231.Controllers
             {
                 return NotFound("Something wrongs");
             }
+        }
 
+        [HttpPost("Search")]
+        public IActionResult SearchProduct(SearchForm searchForm)
+        {
+            try
+            {
+                var listProducts = ProductRepository.SearchProduct(searchForm);
+                if (listProducts.Count > 0)
+                {
+                    var product = _mapper.Map<List<ProductDTO>>(listProducts);
+                    return Ok(product);
+                }
+                return NotFound("Not found any product");
 
+                //var product = ProductRepository.GetProduct();
+                //var mapProd = _mapper.Map<ProductDTO>(product);
+                //return Ok(mapProd);
+            }
+            catch (Exception ex)
+            {
+                return NotFound("Something wrongs");
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ namespace APICalling_Project_PRN231.Models
 
         public int ColorId { get; set; }
         public string? ColorName { get; set; }
+        public string? ColorValue { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
     }
