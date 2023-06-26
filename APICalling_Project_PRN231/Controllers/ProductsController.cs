@@ -73,6 +73,10 @@ namespace APICalling_Project_PRN231.Controllers
                 if (listProducts.Count > 0)
                 {
                     var product = _mapper.Map<List<ProductDTO>>(listProducts);
+                    foreach (var item in product)
+                    {
+                        item.AverageStar = ReviewRepository.AverageStarByProdId(item.ProductId);
+                    }
                     return Ok(product);
                 }
                 return NotFound("Not found any product");

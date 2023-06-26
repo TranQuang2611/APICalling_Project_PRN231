@@ -29,26 +29,29 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
         public static List<Product> SearchProduct(SearchForm searchForm)
         {
             List<Product> productList = _context.Products.ToList(); 
-            if(searchForm.catId != null && searchForm.catId.Count() > 0)
+            var listSearchSize = searchForm.sizeId.Where(x => x != null).ToList();
+            var listSearchRam = searchForm.ramId.Where(x => x != null).ToList();
+            if (searchForm.catId != null && searchForm.catId.Count() > 0)
             {
                 productList = productList.Where(x => searchForm.catId.Contains(x.CategoryId)).ToList();
             }
-            if(searchForm.colorSearch != null && searchForm.colorSearch.Count() > 0)
+            if(searchForm.colorId != null && searchForm.colorId.Count() > 0)
             {
-                productList = productList.Where(x => searchForm.colorSearch.Contains(x.ColorId)).ToList();
+                productList = productList.Where(x => searchForm.colorId.Contains(x.ColorId)).ToList();
             }
-            if (searchForm.sizeSearch != 0)
+            if (searchForm.brandId != null && searchForm.brandId.Count() >0 )
             {
-                productList = productList.Where(x => x.SizeId == searchForm.sizeSearch).ToList();
+                productList = productList.Where(x => searchForm.brandId.Contains(x.BrandId)).ToList();
             }
-            if (searchForm.sizeSearch != 0)
+            if (listSearchSize != null && listSearchSize.Count() > 0) 
             {
-                productList = productList.Where(x => x.SizeId == searchForm.sizeSearch).ToList();
+                productList = productList.Where(x => listSearchSize.Contains(x.SizeId)).ToList();
             }
-            if (searchForm.ramSearch != 0)
+            if (listSearchRam != null && listSearchRam.Count() > 0)
             {
-                productList = productList.Where(x => x.RamId == searchForm.ramSearch).ToList();
+                productList = productList.Where(x => listSearchRam.Contains(x.RamId)).ToList();
             }
+            productList = productList.Where(x => x.UnitSellPrice >= Convert.ToDecimal(searchForm.minPrice) && x.UnitSellPrice <= Convert.ToDecimal(searchForm.maxPrice)).ToList();
             return productList;
         }
     }

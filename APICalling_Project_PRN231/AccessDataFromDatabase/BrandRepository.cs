@@ -4,13 +4,14 @@ using System.Drawing;
 
 namespace APICalling_Project_PRN231.AccessDataFromDatabase
 {
-    public class BrandRepository
+    public class CategoryRepository
     {
         private static readonly ReviewStoreContext _context = new ReviewStoreContext();
 
-        public static List<Brand> GetAllBrand()
+
+        public static List<Models.Category> GetAllCategory()
         {
-            return _context.Brands.ToList();
+            return _context.Categories.ToList();
         }
     }
 }

@@ -1,16 +1,14 @@
 ﻿using APICalling_Project_PRN231.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Drawing;
 
 namespace APICalling_Project_PRN231.AccessDataFromDatabase
 {
-    public class BrandRepository
+    public class ReviewRepository
     {
         private static readonly ReviewStoreContext _context = new ReviewStoreContext();
 
-        public static List<Brand> GetAllBrand()
+        public static decimal AverageStarByProdId(int productId)
         {
-            return _context.Brands.ToList();
+            return Convert.ToDecimal(_context.Reviews.Where(x => x.ProductId == productId).Average(x => x.Rating));
         }
     }
 }
