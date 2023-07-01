@@ -23,5 +23,6 @@ namespace APICalling_Project_PRN231.DTO
         public ColorDTO? Color { get; set; }
         public RamDTO? Ram { get; set; }
         public SizeDTO? Size { get; set; }
+        public List<ReviewDTO> Reviews { get; set; }
     }
 }

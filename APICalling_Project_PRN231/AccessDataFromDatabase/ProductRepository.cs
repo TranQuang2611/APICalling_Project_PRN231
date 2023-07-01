@@ -75,5 +75,11 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             }
             return productList;
         }
+
+        public static Product GetProductDetail(int id)
+        {
+            Product product = _context.Products.Include(x => x.Category).Include(x => x.Brand).Include(x => x.Reviews).FirstOrDefault(x => x.ProductId == id);
+            return product;
+        }
     }
 }

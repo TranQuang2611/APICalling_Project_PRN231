@@ -113,5 +113,25 @@ namespace APICalling_Project_PRN231.Controllers
                 return NotFound("Something wrongs");
             }
         }
+
+        [HttpGet("Detail")]
+        public IActionResult GetDetailProduct(int id)
+        {
+            try
+            {
+                var product = ProductRepository.GetProductDetail(id);
+                var result = _mapper.Map<ProductDTO>(product);
+                result.AverageStar = ReviewRepository.AverageStarByProdId(product.ProductId);
+                return Ok(result);
+
+                //var product = ProductRepository.GetProduct();
+                //var mapProd = _mapper.Map<ProductDTO>(product);
+                //return Ok(mapProd);
+            }
+            catch (Exception ex)
+            {
+                return NotFound("Something wrongs");
+            }
+        }
     }
 }
