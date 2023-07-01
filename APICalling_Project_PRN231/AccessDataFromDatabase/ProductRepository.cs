@@ -51,7 +51,13 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             {
                 productList = productList.Where(x => listSearchRam.Contains(x.RamId)).ToList();
             }
-            productList = productList.Where(x => x.UnitSellPrice >= Convert.ToDecimal(searchForm.minPrice) && x.UnitSellPrice <= Convert.ToDecimal(searchForm.maxPrice)).ToList();
+            if (!string.IsNullOrEmpty(searchForm.minPrice))
+            {
+                productList = productList.Where(x => x.UnitSellPrice >= Convert.ToDecimal(searchForm.minPrice)).ToList();    
+            }
+            if (!string.IsNullOrEmpty(searchForm.maxPrice)){
+                productList = productList.Where(x => x.UnitSellPrice <= Convert.ToDecimal(searchForm.maxPrice)).ToList();
+            }
             return productList;
         }
     }
