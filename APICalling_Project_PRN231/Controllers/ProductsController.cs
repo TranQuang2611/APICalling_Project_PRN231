@@ -64,12 +64,12 @@ namespace APICalling_Project_PRN231.Controllers
             }
         }
 
-        [HttpPost("Search")]
-        public IActionResult SearchProduct(SearchForm searchForm)
+        [HttpGet("Feature")]
+        public IActionResult GetFeartureProduct()
         {
             try
             {
-                var listProducts = ProductRepository.SearchProduct(searchForm);
+                var listProducts = ProductRepository.GetFeartureProduct();
                 if (listProducts.Count > 0)
                 {
                     var product = _mapper.Map<List<ProductDTO>>(listProducts);
@@ -80,6 +80,29 @@ namespace APICalling_Project_PRN231.Controllers
                     return Ok(product);
                 }
                 return NotFound("Not found any product");
+
+                //var product = ProductRepository.GetProduct();
+                //var mapProd = _mapper.Map<ProductDTO>(product);
+                //return Ok(mapProd);
+            }
+            catch (Exception ex)
+            {
+                return NotFound("Something wrongs");
+            }
+        }
+
+        [HttpPost("Search")]
+        public IActionResult SearchProduct(SearchForm searchForm)
+        {
+            try
+            {
+                var listProducts = ProductRepository.SearchProduct(searchForm);
+                var product = _mapper.Map<List<ProductDTO>>(listProducts);
+                foreach (var item in product)
+                {
+                    item.AverageStar = ReviewRepository.AverageStarByProdId(item.ProductId);
+                }
+                return Ok(product);
 
                 //var product = ProductRepository.GetProduct();
                 //var mapProd = _mapper.Map<ProductDTO>(product);
