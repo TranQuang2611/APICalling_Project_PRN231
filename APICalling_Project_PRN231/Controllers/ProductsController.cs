@@ -122,6 +122,12 @@ namespace APICalling_Project_PRN231.Controllers
                 var product = ProductRepository.GetProductDetail(id);
                 var result = _mapper.Map<ProductDTO>(product);
                 result.AverageStar = ReviewRepository.AverageStarByProdId(product.ProductId);
+                foreach (var item in result.Reviews)
+                {
+                    item.totalComment = CommentRepository.TotalCommentOfReview(item.ReviewId);
+                    item.Comments = CommentRepository.GetPagingCommentByReViewId(item.ReviewId);
+                    item.User = UserRepository.GetUserById(Convert.ToInt32(item.UserId));
+                }
                 return Ok(result);
 
                 //var product = ProductRepository.GetProduct();
@@ -133,5 +139,6 @@ namespace APICalling_Project_PRN231.Controllers
                 return NotFound("Something wrongs");
             }
         }
+
     }
 }

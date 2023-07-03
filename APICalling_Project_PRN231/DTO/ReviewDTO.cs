@@ -14,5 +14,6 @@ namespace APICalling_Project_PRN231.DTO
 
         public UserDTO? User { get; set; }
         public List<CommentDTO> Comments { get; set; }
+        public int totalComment { get; set; }
     }
 }

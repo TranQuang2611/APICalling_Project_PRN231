@@ -10,5 +10,10 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
         {
             return Convert.ToDecimal(_context.Reviews.Where(x => x.ProductId == productId).Average(x => x.Rating));
         }
+
+        public static List<Review> GetReviewByProdId(int productId)
+        {
+            return _context.Reviews.Where(x => x.ProductId == productId).OrderByDescending(x => x.ReviewDate).ToList();
+        }
     }
 }
