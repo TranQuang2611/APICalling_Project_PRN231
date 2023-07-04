@@ -1,4 +1,5 @@
-﻿using APICalling_Project_PRN231.Models;
+﻿using APICalling_Project_PRN231.DTO;
+using APICalling_Project_PRN231.Models;
 
 namespace APICalling_Project_PRN231.AccessDataFromDatabase
 {
@@ -11,9 +12,22 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             return Convert.ToDecimal(_context.Reviews.Where(x => x.ProductId == productId).Average(x => x.Rating));
         }
 
-        public static List<Review> GetReviewByProdId(int productId)
+        public static List<Review> GetReviewByProdId(ReviewModel model)
         {
-            return _context.Reviews.Where(x => x.ProductId == productId).OrderByDescending(x => x.ReviewDate).ToList();
+            var query = _context.Reviews.Where(x => x.ProductId == model.ProductId);
+            if(model.Star != 0)
+            {
+                query = query.Where(x => x.Rating == model.Star);
+            }
+            if(model.Sort != 0)
+            {
+                query = query.OrderByDescending(x => x.ReviewDate);
+            }
+            else
+            {
+                query = query.OrderBy(x => x.ReviewDate);
+            }
+            return query.ToList();
         }
     }
 }

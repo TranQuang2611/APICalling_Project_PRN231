@@ -18,9 +18,9 @@ namespace APICalling_Project_PRN231.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get(int productId)
+        public IActionResult Get(ReviewModel model)
         {
-            var listReview = ReviewRepository.GetReviewByProdId(productId);
+            var listReview = ReviewRepository.GetReviewByProdId(model);
             var result = _mapper.Map<List<ReviewDTO>>(listReview);
             foreach (var item in result)
             {
