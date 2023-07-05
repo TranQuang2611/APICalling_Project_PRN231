@@ -9,7 +9,8 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 
         public static decimal AverageStarByProdId(int productId)
         {
-            return Convert.ToDecimal(_context.Reviews.Where(x => x.ProductId == productId).Average(x => x.Rating));
+            decimal average = Convert.ToDecimal(_context.Reviews.Where(x => x.ProductId == productId).Average(x => x.Rating));
+            return decimal.Round(average, 2);
         }
 
         public static List<Review> GetReviewByProdId(ReviewModel model)
@@ -21,13 +22,19 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             }
             if(model.Sort != 0)
             {
-                query = query.OrderByDescending(x => x.ReviewDate);
+                query = query.OrderBy(x => x.ReviewDate);
             }
             else
             {
-                query = query.OrderBy(x => x.ReviewDate);
+                query = query.OrderByDescending(x => x.ReviewDate);
             }
             return query.ToList();
+        }
+
+        public static void AddReview(Review review)
+        {
+            _context.Reviews.Add(review);
+            _context.SaveChanges();
         }
     }
 }

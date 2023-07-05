@@ -14,6 +14,7 @@ namespace APICalling_Project_PRN231.DTO
             CreateMap<Product, ProductDTO>().ReverseMap();
             CreateMap<Comment, CommentDTO>().ReverseMap();
             CreateMap<Review, ReviewDTO>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
         }
     }
 }

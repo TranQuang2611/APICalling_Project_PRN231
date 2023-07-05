@@ -18,5 +18,12 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             result.Username = user.Username;
             return result;
         }
+
+        public static User GetUser(LoginModel model)
+        {
+            var user = _context.Users.FirstOrDefault(x => x.Username == model.UserName && x.Password == model.Password);
+            return user;
+        }
+
     }
 }
