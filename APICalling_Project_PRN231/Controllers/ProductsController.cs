@@ -2,6 +2,7 @@
 using APICalling_Project_PRN231.DTO;
 using APICalling_Project_PRN231.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

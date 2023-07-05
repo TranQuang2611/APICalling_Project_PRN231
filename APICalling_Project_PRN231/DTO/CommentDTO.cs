@@ -12,7 +12,7 @@ namespace APICalling_Project_PRN231.DTO
         public string? Comment1 { get; set; }
         public ReviewDTO? Review { get; set; }
         public UserDTO? User { get; set; }
-
+        public string UserName { get; set; }
         public string Message { get; set; } = string.Empty;
     }
 }

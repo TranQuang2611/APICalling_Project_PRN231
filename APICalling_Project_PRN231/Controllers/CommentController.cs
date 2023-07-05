@@ -32,6 +32,7 @@ namespace APICalling_Project_PRN231.Controllers
             {
                 CommentRepository.AddComment(comment);
                 commentDTO = _mapper.Map<CommentDTO>(comment);
+                commentDTO.UserName = UserRepository.GetUserById(userCmtId).Username;
                 return Ok(commentDTO);
             }
             catch (Exception)

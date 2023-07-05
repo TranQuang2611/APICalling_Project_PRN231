@@ -67,7 +67,7 @@ namespace APICalling_Project_PRN231.Controllers
                     //new Claim(ClaimTypes.Role, user.Role.RoleName),
                     new Claim("TokenId", Guid.NewGuid().ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddMinutes(10),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha256Signature)
 
             };
