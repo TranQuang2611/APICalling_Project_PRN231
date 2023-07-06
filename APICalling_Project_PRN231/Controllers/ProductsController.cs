@@ -141,5 +141,19 @@ namespace APICalling_Project_PRN231.Controllers
             }
         }
 
+        [HttpPost("Update")]
+        public IActionResult Update(ProductDTO product)
+        {
+            try
+            {
+                ProductRepository.UpdateProductById(product);
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

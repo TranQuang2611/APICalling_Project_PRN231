@@ -81,5 +81,18 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             Product product = _context.Products.Include(x => x.Category).Include(x => x.Brand).Include(x => x.Reviews).FirstOrDefault(x => x.ProductId == id);
             return product;
         }
+
+        public static void UpdateProductById(ProductDTO dto)
+        {
+            Product product = _context.Products.FirstOrDefault(x => x.ProductId == dto.ProductId);
+            product.ProductName = dto.ProductName;
+            product.ColorId = dto.ColorId;
+            product.SizeId = dto.SizeId;
+            product.RamId = dto.RamId;
+            product.UnitSellPrice = dto.UnitSellPrice;
+            product.UnitInStock = dto.UnitInStock;
+            product.Description = dto.Description;
+            _context.Products.Update(product);
+        }
     }
 }

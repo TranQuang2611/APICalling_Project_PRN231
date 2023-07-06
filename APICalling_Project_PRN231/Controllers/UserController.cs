@@ -64,7 +64,7 @@ namespace APICalling_Project_PRN231.Controllers
                     new Claim(ClaimTypes.Name, user.Username),
 
                     //role
-                    //new Claim(ClaimTypes.Role, user.Role.RoleName),
+                    new Claim(ClaimTypes.Role, user.Role),
                     new Claim("TokenId", Guid.NewGuid().ToString())
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(10),

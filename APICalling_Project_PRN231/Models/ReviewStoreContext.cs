@@ -184,6 +184,8 @@ namespace APICalling_Project_PRN231.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Role).HasMaxLength(50);
+
                 entity.Property(e => e.Username).HasMaxLength(50);
             });
 
