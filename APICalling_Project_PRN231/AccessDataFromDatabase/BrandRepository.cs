@@ -6,10 +6,14 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 {
     public class CategoryRepository
     {
-        private static readonly ReviewStoreContext _context = new ReviewStoreContext();
+        private readonly ReviewStoreContext _context;
 
+        public CategoryRepository(ReviewStoreContext context)
+        {
+            _context = context;
+        }
 
-        public static List<Models.Category> GetAllCategory()
+        public List<Models.Category> GetAllCategory()
         {
             return _context.Categories.ToList();
         }

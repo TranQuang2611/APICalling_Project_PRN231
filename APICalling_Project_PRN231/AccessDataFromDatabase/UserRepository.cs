@@ -7,10 +7,14 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 {
     public class UserRepository
     {
-        private static readonly ReviewStoreContext _context = new ReviewStoreContext();
+        private readonly ReviewStoreContext _context;
 
+        public UserRepository(ReviewStoreContext context)
+        {
+            _context = context;
+        }
 
-        public static UserDTO GetUserById(int id)
+        public UserDTO GetUserById(int id)
         {
             var user = _context.Users.FirstOrDefault(x => x.UserId == id);  
             UserDTO result = new UserDTO();
@@ -19,7 +23,7 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             return result;
         }
 
-        public static User GetUser(LoginModel model)
+        public User GetUser(LoginModel model)
         {
             var user = _context.Users.FirstOrDefault(x => x.Username == model.UserName && x.Password == model.Password);
             return user;

@@ -12,22 +12,28 @@ namespace APICalling_Project_PRN231.Controllers
     public class ReviewController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private CommentRepository _commentRepository;
+        private ReviewRepository _reviewRepository;
+        private UserRepository _userRepository;
 
-        public ReviewController(IMapper mapper)
+        public ReviewController(IMapper mapper, CommentRepository commentRepository, ReviewRepository reviewRepository, UserRepository userRepository)
         {
             _mapper = mapper;
+            _commentRepository = commentRepository;
+            _reviewRepository = reviewRepository;
+            _userRepository = userRepository;
         }
 
         [HttpPost]
         public IActionResult Get(ReviewModel model)
         {
-            var listReview = ReviewRepository.GetReviewByProdId(model);
+            var listReview = _reviewRepository.GetReviewByProdId(model);
             var result = _mapper.Map<List<ReviewDTO>>(listReview);
             foreach (var item in result)
             {
-                item.totalComment = CommentRepository.TotalCommentOfReview(item.ReviewId);
-                item.Comments = CommentRepository.GetPagingCommentByReViewId(item.ReviewId);
-                item.User = UserRepository.GetUserById(Convert.ToInt32(item.UserId));
+                item.totalComment = _commentRepository.TotalCommentOfReview(item.ReviewId);
+                item.Comments = _commentRepository.GetPagingCommentByReViewId(item.ReviewId);
+                item.User = _userRepository.GetUserById(Convert.ToInt32(item.UserId));
             }
             return Ok(result);
         }
@@ -45,7 +51,7 @@ namespace APICalling_Project_PRN231.Controllers
             ReviewDTO reviewDTO = new ReviewDTO();
             try
             {
-                ReviewRepository.AddReview(review);
+                _reviewRepository.AddReview(review);
                 reviewDTO = _mapper.Map<ReviewDTO>(review);
                 return Ok(reviewDTO);
             }

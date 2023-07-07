@@ -5,15 +5,20 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 {
     public class ReviewRepository
     {
-        private static readonly ReviewStoreContext _context = new ReviewStoreContext();
+        private readonly ReviewStoreContext _context;
 
-        public static decimal AverageStarByProdId(int productId)
+        public ReviewRepository(ReviewStoreContext context)
+        {
+            _context = context;
+        }
+
+        public decimal AverageStarByProdId(int productId)
         {
             decimal average = Convert.ToDecimal(_context.Reviews.Where(x => x.ProductId == productId).Average(x => x.Rating));
             return decimal.Round(average, 2);
         }
 
-        public static List<Review> GetReviewByProdId(ReviewModel model)
+        public List<Review> GetReviewByProdId(ReviewModel model)
         {
             var query = _context.Reviews.Where(x => x.ProductId == model.ProductId);
             if(model.Star != 0)
@@ -31,7 +36,7 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             return query.ToList();
         }
 
-        public static void AddReview(Review review)
+        public void AddReview(Review review)
         {
             _context.Reviews.Add(review);
             _context.SaveChanges();

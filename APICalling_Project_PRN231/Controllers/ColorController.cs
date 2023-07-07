@@ -11,10 +11,12 @@ namespace APICalling_Project_PRN231.Controllers
     public class ColorController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private ColorRepository _colorRepository;
 
-        public ColorController(IMapper mapper)
+        public ColorController(IMapper mapper, ColorRepository colorRepository)
         {
             _mapper = mapper;
+            _colorRepository = colorRepository;
         }
 
         [HttpGet]
@@ -22,7 +24,7 @@ namespace APICalling_Project_PRN231.Controllers
         {
             try
             {
-                var listColor = ColorRepository.GetAllColor();
+                var listColor = _colorRepository.GetAllColor();
                 var result = _mapper.Map<List<ColorDTO>>(listColor);
                 return Ok(result);
             }

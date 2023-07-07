@@ -11,10 +11,12 @@ namespace APICalling_Project_PRN231.Controllers
     public class RamController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private RamRepository _ramRepository;
 
-        public RamController(IMapper mapper)
+        public RamController(IMapper mapper, RamRepository ramRepository)
         {
             _mapper = mapper;
+            _ramRepository = ramRepository;
         }
 
         [HttpGet]
@@ -22,7 +24,7 @@ namespace APICalling_Project_PRN231.Controllers
         {
             try
             {
-                var listRam = RamRepository.GetAllRam();
+                var listRam = _ramRepository.GetAllRam();
                 var result = _mapper.Map<List<RamDTO>>(listRam);
                 return Ok(result);
             }

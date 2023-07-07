@@ -7,20 +7,25 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 {
     public class ProductRepository
     {
-        private static readonly ReviewStoreContext _context = new ReviewStoreContext();
+        private readonly ReviewStoreContext _context;
 
-        public static List<Product> GetListProduct()
+        public ProductRepository(ReviewStoreContext context)
+        {
+            _context = context;
+        }
+
+        public List<Product> GetListProduct()
         {
             List<Product> products = _context.Products.Include(x => x.Brand).Include(x => x.Category).Include(x => x.Color).Include(x => x.Ram).Include(x => x.Size).ToList();
             return products;
         }
-        public static List<Product> GetNewestProduct()
+        public List<Product> GetNewestProduct()
         {
             List<Product> products = _context.Products.Include(x => x.Brand).Include(x => x.Category).Include(x => x.Color).Include(x => x.Ram).Include(x => x.Size).OrderByDescending(x => x.ProductId).Take(6).ToList();
             return products;
         }
 
-        public static List<Product> GetFeartureProduct()
+        public List<Product> GetFeartureProduct()
         {
             List<int?> idProd = _context.Reviews.OrderByDescending(x => x.ReviewDate).GroupBy(x => x.ProductId).Select(n => new { ProductId = n.Key, AverageRating = n.Average(x => x.Rating)})
                 .OrderByDescending(n => n.AverageRating).Take(6).Select(n => n.ProductId).ToList();
@@ -28,13 +33,13 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             return products;
         }
 
-        public static Product GetProduct()
+        public Product GetProduct()
         {
             Product products = _context.Products.FirstOrDefault();
             return products;
         }
 
-        public static List<Product> SearchProduct(SearchForm searchForm)
+        public List<Product> SearchProduct(SearchForm searchForm)
         {
             List<Product> productList = _context.Products.Include(x => x.Size).Include(x => x.Ram).Include(x => x.Category).Include(x => x.Color).ToList(); 
             var listSearchSize = searchForm.sizeId.Where(x => x != null).ToList();
@@ -76,13 +81,16 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             return productList;
         }
 
-        public static Product GetProductDetail(int id)
+        public Product GetProductDetail(int id)
         {
-            Product product = _context.Products.Include(x => x.Category).Include(x => x.Brand).Include(x => x.Reviews).FirstOrDefault(x => x.ProductId == id);
+            Product product = _context.Products.Include(x => x.Category)
+                .Include(x => x.Brand).Include(x => x.Reviews)
+                .Include(x => x.Color).Include(x => x.Ram)
+                .Include(x => x.Size).FirstOrDefault(x => x.ProductId == id);
             return product;
         }
 
-        public static void UpdateProductById(ProductDTO dto)
+        public void UpdateProductById(ProductDTO dto)
         {
             Product product = _context.Products.FirstOrDefault(x => x.ProductId == dto.ProductId);
             product.ProductName = dto.ProductName;
@@ -95,7 +103,7 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             _context.Products.Update(product);
         }
 
-        public static Product Create(ProductDTO dto)
+        public Product Create(ProductDTO dto)
         {
             Product product = new Product();
             product.CategoryId = dto.CategoryId;

@@ -6,9 +6,14 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 {
     public class SizeRepository
     {
-        private static readonly ReviewStoreContext _context = new ReviewStoreContext();
+        private readonly ReviewStoreContext _context;
 
-        public static List<Models.Size> GetAllSize()
+        public SizeRepository(ReviewStoreContext context)
+        {
+            _context = context;
+        }
+
+        public List<Models.Size> GetAllSize()
         {
             return _context.Sizes.ToList();
         }

@@ -13,10 +13,18 @@ namespace APICalling_Project_PRN231.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private CommentRepository _commentRepository;
+        private ProductRepository _productRepository;
+        private ReviewRepository _reviewRepository;
+        private UserRepository _userRepository;
 
-        public ProductsController(IMapper mapper)
+        public ProductsController(IMapper mapper, CommentRepository commentRepository, ProductRepository productRepository, UserRepository userRepository, ReviewRepository reviewRepository)
         {
             _mapper = mapper;
+            _commentRepository = commentRepository;
+            _productRepository = productRepository;
+            _userRepository = userRepository;
+            _reviewRepository = reviewRepository;
         }
 
         [HttpGet]
@@ -24,7 +32,7 @@ namespace APICalling_Project_PRN231.Controllers
         {
             try
             {
-                var listProducts = ProductRepository.GetListProduct();
+                var listProducts = _productRepository.GetListProduct();
                 if (listProducts.Count > 0)
                 {
                     var product = _mapper.Map<List<ProductDTO>>(listProducts);
@@ -47,7 +55,7 @@ namespace APICalling_Project_PRN231.Controllers
         {
             try
             {
-                var listProducts = ProductRepository.GetNewestProduct();
+                var listProducts = _productRepository.GetNewestProduct();
                 if (listProducts.Count > 0)
                 {
                     var product = _mapper.Map<List<ProductDTO>>(listProducts);
@@ -70,13 +78,13 @@ namespace APICalling_Project_PRN231.Controllers
         {
             try
             {
-                var listProducts = ProductRepository.GetFeartureProduct();
+                var listProducts = _productRepository.GetFeartureProduct();
                 if (listProducts.Count > 0)
                 {
                     var product = _mapper.Map<List<ProductDTO>>(listProducts);
                     foreach (var item in product)
                     {
-                        item.AverageStar = ReviewRepository.AverageStarByProdId(item.ProductId);
+                        item.AverageStar = _reviewRepository.AverageStarByProdId(item.ProductId);
                     }
                     return Ok(product);
                 }
@@ -97,11 +105,11 @@ namespace APICalling_Project_PRN231.Controllers
         {
             try
             {
-                var listProducts = ProductRepository.SearchProduct(searchForm);
+                var listProducts = _productRepository.SearchProduct(searchForm);
                 var product = _mapper.Map<List<ProductDTO>>(listProducts);
                 foreach (var item in product)
                 {
-                    item.AverageStar = ReviewRepository.AverageStarByProdId(item.ProductId);
+                    item.AverageStar = _reviewRepository.AverageStarByProdId(item.ProductId);
                 }
                 return Ok(product);
 
@@ -120,20 +128,19 @@ namespace APICalling_Project_PRN231.Controllers
         {
             try
             {
-                var product = ProductRepository.GetProductDetail(id);
+                var product = _productRepository.GetProductDetail(id);
                 var result = _mapper.Map<ProductDTO>(product);
-                result.AverageStar = ReviewRepository.AverageStarByProdId(product.ProductId);
-                foreach (var item in result.Reviews)
+                if(result != null)
                 {
-                    item.totalComment = CommentRepository.TotalCommentOfReview(item.ReviewId);
-                    item.Comments = CommentRepository.GetPagingCommentByReViewId(item.ReviewId);
-                    item.User = UserRepository.GetUserById(Convert.ToInt32(item.UserId));
+                    result.AverageStar = _reviewRepository.AverageStarByProdId(product.ProductId);
+                    foreach (var item in result.Reviews)
+                    {
+                        item.totalComment = _commentRepository.TotalCommentOfReview(item.ReviewId);
+                        item.Comments = _commentRepository.GetPagingCommentByReViewId(item.ReviewId);
+                        item.User = _userRepository.GetUserById(Convert.ToInt32(item.UserId));
+                    }
                 }
                 return Ok(result);
-
-                //var product = ProductRepository.GetProduct();
-                //var mapProd = _mapper.Map<ProductDTO>(product);
-                //return Ok(mapProd);
             }
             catch (Exception ex)
             {
@@ -146,7 +153,7 @@ namespace APICalling_Project_PRN231.Controllers
         {
             try
             {
-                ProductRepository.UpdateProductById(product);
+                _productRepository.UpdateProductById(product);
                 return Ok(product);
             }
             catch (Exception ex)
@@ -160,7 +167,7 @@ namespace APICalling_Project_PRN231.Controllers
         {
             try
             {
-                var newProd = ProductRepository.Create(product);
+                var newProd = _productRepository.Create(product);
                 product.ProductId = newProd.ProductId;
                 return Ok(product);
             }

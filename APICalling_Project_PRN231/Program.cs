@@ -1,7 +1,10 @@
 ﻿using APICalling_Project_PRN231;
+using APICalling_Project_PRN231.AccessDataFromDatabase;
 using APICalling_Project_PRN231.DTO;
+using APICalling_Project_PRN231.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -13,6 +16,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddDbContextFactory<ReviewStoreContext>(o => o.UseSqlServer("Server=localhost;Database=ReviewStore;user=sa;password=12345678"), ServiceLifetime.Transient);
+
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddScoped<BrandRepository>();
+builder.Services.AddScoped<ColorRepository>();
+builder.Services.AddScoped<SizeRepository>();
+builder.Services.AddScoped<RamRepository>();
+builder.Services.AddScoped<ProductRepository>();
+builder.Services.AddScoped<CommentRepository>();
+builder.Services.AddScoped<ReviewRepository>();
+
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 

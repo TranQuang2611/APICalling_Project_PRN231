@@ -18,17 +18,19 @@ namespace APICalling_Project_PRN231.Controllers
     {
         private readonly IMapper _mapper;
         private readonly AppSetttings _appSetttings;
+        private UserRepository _userRepository;
 
-        public UserController(IMapper mapper, IOptionsMonitor<AppSetttings> optionsMonitor)
+        public UserController(IMapper mapper, IOptionsMonitor<AppSetttings> optionsMonitor, UserRepository userRepository)
         {
             _mapper = mapper;
             _appSetttings = optionsMonitor.CurrentValue;
+            _userRepository = userRepository;
         }
 
         [HttpPost("Login")]
         public IActionResult ValidateUser(LoginModel model)
         {
-            var user = UserRepository.GetUser(model);
+            var user = _userRepository.GetUser(model);
             if (user == null)
             {
                 return Ok(new ApiRespond

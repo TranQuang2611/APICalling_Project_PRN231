@@ -7,15 +7,16 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 {
     public class ColorRepository
     {
-        private static readonly ReviewStoreContext _context = new ReviewStoreContext();
+        private readonly ReviewStoreContext _context;
         private readonly IMapper _mapper;
 
-        public ColorRepository(IMapper mapper)
+        public ColorRepository(IMapper mapper, ReviewStoreContext context)
         {
             _mapper = mapper;
+            _context = context;
         }
 
-        public static List<Models.Color> GetAllColor()
+        public List<Models.Color> GetAllColor()
         {
             return _context.Colors.ToList();
         }

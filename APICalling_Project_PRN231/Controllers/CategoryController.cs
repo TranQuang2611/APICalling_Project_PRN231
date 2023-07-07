@@ -11,10 +11,12 @@ namespace APICalling_Project_PRN231.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private CategoryRepository _categoryRepository;
 
-        public CategoryController(IMapper mapper)
+        public CategoryController(IMapper mapper, CategoryRepository categoryRepository)
         {
             _mapper = mapper;
+            _categoryRepository = categoryRepository;
         }
 
         [HttpGet]
@@ -22,7 +24,7 @@ namespace APICalling_Project_PRN231.Controllers
         {
             try
             {
-                var categories = CategoryRepository.GetAllCategory();
+                var categories = _categoryRepository.GetAllCategory();
                 var result = _mapper.Map<List<CategoryDTO>>(categories);
                 return Ok(result);
             }

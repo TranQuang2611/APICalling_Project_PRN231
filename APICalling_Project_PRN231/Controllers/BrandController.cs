@@ -11,10 +11,12 @@ namespace APICalling_Project_PRN231.Controllers
     public class BrandController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private BrandRepository _brandRepository;
 
-        public BrandController(IMapper mapper)
+        public BrandController(IMapper mapper, BrandRepository brandRepository)
         {
             _mapper = mapper;
+            _brandRepository = brandRepository;
         }
 
         [HttpGet]
@@ -22,7 +24,7 @@ namespace APICalling_Project_PRN231.Controllers
         {
             try
             {
-                var brands = BrandRepository.GetAllBrand();
+                var brands = _brandRepository.GetAllBrand();
                 var result = _mapper.Map<List<BrandDTO>>(brands);
                 return Ok(result);
             }

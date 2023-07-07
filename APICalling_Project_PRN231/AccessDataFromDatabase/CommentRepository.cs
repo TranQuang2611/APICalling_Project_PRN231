@@ -6,9 +6,16 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 {
     public class CommentRepository
     {
-        private static readonly ReviewStoreContext _context = new ReviewStoreContext();
+        private readonly ReviewStoreContext _context;
+        private UserRepository _userRepository;
 
-        public static List<CommentDTO> GetListCommentByReViewId(int reviewId)
+        public CommentRepository(ReviewStoreContext context, UserRepository userRepository)
+        {
+            _context = context;
+            _userRepository = userRepository;
+        }
+
+        public List<CommentDTO> GetListCommentByReViewId(int reviewId)
         {
             var list = _context.Comments.Where(x => x.ReviewId == reviewId).ToList();
             var result = list.Select(x => new CommentDTO
@@ -18,12 +25,12 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
                 LikeReact = x.LikeReact,
                 UserId = x.UserId,
                 Comment1 = x.Comment1,
-                User = UserRepository.GetUserById(Convert.ToInt32(x.UserId))
+                User = _userRepository.GetUserById(Convert.ToInt32(x.UserId))
             }).OrderByDescending(r => r.CommentDate).ToList();
             return result;
         }
 
-        public static List<CommentDTO> GetPagingCommentByReViewId(int reviewId)
+        public List<CommentDTO> GetPagingCommentByReViewId(int reviewId)
         {
             var list = _context.Comments.Where(x => x.ReviewId == reviewId).ToList();
             var result = list.Select(x => new CommentDTO
@@ -33,16 +40,16 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
                 LikeReact = x.LikeReact,
                 UserId = x.UserId,
                 Comment1 = x.Comment1,
-                User = UserRepository.GetUserById(Convert.ToInt32(x.UserId))
+                User = _userRepository.GetUserById(Convert.ToInt32(x.UserId))
             }).OrderByDescending(r => r.CommentDate).Take(3).ToList();
             return result;
         }
 
-        public static int TotalCommentOfReview(int reviewId)
+        public int TotalCommentOfReview(int reviewId)
         {
             return _context.Comments.Where(x => x.ReviewId == reviewId).Count();
         }
-        public static void AddComment(Comment comment)
+        public void AddComment(Comment comment)
         {
             _context.Comments.Add(comment);
             _context.SaveChanges();

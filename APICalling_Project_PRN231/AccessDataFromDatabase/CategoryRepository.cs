@@ -6,9 +6,14 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 {
     public class BrandRepository
     {
-        private static readonly ReviewStoreContext _context = new ReviewStoreContext();
+        private readonly ReviewStoreContext _context;
 
-        public static List<Brand> GetAllBrand()
+        public BrandRepository(ReviewStoreContext context)
+        {
+            _context = context;
+        }
+
+        public List<Brand> GetAllBrand()
         {
             return _context.Brands.ToList();
         }

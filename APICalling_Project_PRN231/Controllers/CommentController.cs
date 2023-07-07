@@ -12,10 +12,14 @@ namespace APICalling_Project_PRN231.Controllers
     public class CommentController : ControllerBase
     {
         private readonly IMapper _mapper;
+        private CommentRepository _commentRepository;
+        private UserRepository _userRepository;
 
-        public CommentController(IMapper mapper)
+        public CommentController(IMapper mapper, CommentRepository commentRepository, UserRepository userRepository)
         {
             _mapper = mapper;
+            _commentRepository = commentRepository;
+            _userRepository = userRepository;
         }
 
         [HttpGet("AddComment")]
@@ -30,9 +34,9 @@ namespace APICalling_Project_PRN231.Controllers
             CommentDTO commentDTO = new CommentDTO();
             try
             {
-                CommentRepository.AddComment(comment);
+                _commentRepository.AddComment(comment);
                 commentDTO = _mapper.Map<CommentDTO>(comment);
-                commentDTO.UserName = UserRepository.GetUserById(userCmtId).Username;
+                commentDTO.UserName = _userRepository.GetUserById(userCmtId).Username;
                 return Ok(commentDTO);
             }
             catch (Exception)
