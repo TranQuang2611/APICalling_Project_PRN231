@@ -41,7 +41,7 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 
         public List<Product> SearchProduct(SearchForm searchForm)
         {
-            List<Product> productList = _context.Products.Include(x => x.Size).Include(x => x.Ram).Include(x => x.Category).Include(x => x.Color).ToList(); 
+            List<Product> productList = _context.Products.Include(x => x.Size).Include(x => x.Ram).Include(x => x.Category).Include(x => x.Color).Include(x => x.Brand).ToList(); 
             var listSearchSize = searchForm.sizeId.Where(x => x != null).ToList();
             var listSearchRam = searchForm.ramId.Where(x => x != null).ToList();
             if (!string.IsNullOrEmpty(searchForm.nameProd))
