@@ -155,5 +155,20 @@ namespace APICalling_Project_PRN231.Controllers
             }
         }
 
+        [HttpPost("Create")]
+        public IActionResult Create(ProductDTO product)
+        {
+            try
+            {
+                var newProd = ProductRepository.Create(product);
+                product.ProductId = newProd.ProductId;
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

@@ -94,5 +94,23 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             product.Description = dto.Description;
             _context.Products.Update(product);
         }
+
+        public static Product Create(ProductDTO dto)
+        {
+            Product product = new Product();
+            product.CategoryId = dto.CategoryId;
+            product.BrandId = dto.BrandId;  
+            product.ProductName = dto.ProductName;
+            product.ColorId = dto.ColorId;
+            product.SizeId = dto.SizeId;
+            product.RamId = dto.RamId;
+            product.UnitPrice = dto.UnitPrice;
+            product.UnitSellPrice = dto.UnitSellPrice;
+            product.UnitInStock = dto.UnitInStock;
+            product.Description = dto.Description;
+            _context.Products.Add(product);
+            _context.SaveChanges();
+            return product;
+        }
     }
 }
