@@ -149,6 +149,7 @@ namespace APICalling_Project_PRN231.Controllers
         }
 
         [HttpPost("Update")]
+        [Authorize(Roles = "admin")]
         public IActionResult Update(ProductDTO product)
         {
             try
@@ -163,6 +164,7 @@ namespace APICalling_Project_PRN231.Controllers
         }
 
         [HttpPost("Create")]
+        [Authorize(Roles = "admin")]
         public IActionResult Create(ProductDTO product)
         {
             try

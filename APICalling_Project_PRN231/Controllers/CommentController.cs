@@ -2,6 +2,7 @@
 using APICalling_Project_PRN231.DTO;
 using APICalling_Project_PRN231.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,7 @@ namespace APICalling_Project_PRN231.Controllers
         }
 
         [HttpGet("AddComment")]
+        [Authorize]
         public IActionResult AddComment(int reviewId, int userCmtId, string content)
         {
             Comment comment = new Comment();
