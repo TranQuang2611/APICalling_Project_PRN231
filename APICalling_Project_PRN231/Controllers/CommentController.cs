@@ -46,7 +46,40 @@ namespace APICalling_Project_PRN231.Controllers
                 commentDTO.Message = "Có lỗi xảy ra";
                 return Ok(commentDTO);
             }
-            
+        }
+
+        [HttpPost("Update")]
+        [Authorize]
+        public IActionResult Update(UpdateCmtDTO cmt)
+        {
+            CommentDTO commentDTO = new CommentDTO();
+            try
+            {
+                var commment =  _commentRepository.UpdateComment(cmt.cmtId, cmt.newContent);
+                commentDTO = _mapper.Map<CommentDTO>(commment);
+                return Ok(commentDTO);
+            }
+            catch (Exception)
+            {
+                commentDTO.Message = "Có lỗi xảy ra";
+                return Ok(commentDTO);
+            }
+        }
+
+        [HttpDelete("Delete")]
+        [Authorize]
+        public IActionResult Delete(UpdateCmtDTO cmt)
+        {
+            try
+            {
+                _commentRepository.DeleteComment(cmt.cmtId);
+                cmt.message = "success";
+            }
+            catch (Exception)
+            {
+                cmt.message = "error";
+            }
+            return Ok(cmt);
         }
     }
 }

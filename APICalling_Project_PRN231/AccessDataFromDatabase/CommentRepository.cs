@@ -36,12 +36,13 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             var result = list.Select(x => new CommentDTO
             {
                 ReviewId = x.ReviewId,
+                CommentId = x.CommentId,
                 CommentDate = x.CommentDate,
                 LikeReact = x.LikeReact,
                 UserId = x.UserId,
                 Comment1 = x.Comment1,
                 User = _userRepository.GetUserById(Convert.ToInt32(x.UserId))
-            }).OrderByDescending(r => r.CommentDate).Take(3).ToList();
+            }).OrderByDescending(r => r.CommentDate).ToList();
             return result;
         }
 
@@ -52,6 +53,23 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
         public void AddComment(Comment comment)
         {
             _context.Comments.Add(comment);
+            _context.SaveChanges();
+        }
+
+        public Comment UpdateComment(int commentId, string content)
+        {
+            var comment =  _context.Comments.FirstOrDefault(x => x.CommentId == commentId);
+            comment.Comment1 = content.Trim();
+            comment.CommentDate = DateTime.Now;
+            _context.Comments.Update(comment);
+            _context.SaveChanges(true);
+            return comment;
+        }
+
+        public void DeleteComment(int commentId)
+        {
+            var comment = _context.Comments.FirstOrDefault(x => x.CommentId == commentId);
+            _context.Comments.Remove(comment);
             _context.SaveChanges();
         }
     }
