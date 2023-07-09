@@ -63,9 +63,7 @@ namespace APICalling_Project_PRN231.Models
 
                 entity.Property(e => e.ColorName).HasMaxLength(100);
 
-                entity.Property(e => e.ColorValue)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.ColorValue).HasMaxLength(100);
             });
 
             modelBuilder.Entity<Comment>(entity =>

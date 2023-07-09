@@ -22,6 +22,7 @@ namespace APICalling_Project_PRN231.Models
         public int? UnitInStock { get; set; }
         public string? Description { get; set; }
         public int? CategoryId { get; set; }
+        public bool? IsActive { get; set; }
 
         public virtual Brand? Brand { get; set; }
         public virtual Category? Category { get; set; }

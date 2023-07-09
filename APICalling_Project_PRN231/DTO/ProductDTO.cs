@@ -17,6 +17,7 @@ namespace APICalling_Project_PRN231.DTO
         public string? Description { get; set; }
         public int? CategoryId { get; set; }
         public decimal AverageStar { get; set; }
+        public bool? IsActive { get; set; }
 
         public BrandDTO? Brand { get; set; }
         public CategoryDTO? Category { get; set; }

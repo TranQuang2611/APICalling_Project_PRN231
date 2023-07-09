@@ -16,12 +16,12 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 
         public List<Product> GetListProduct()
         {
-            List<Product> products = _context.Products.Include(x => x.Brand).Include(x => x.Category).Include(x => x.Color).Include(x => x.Ram).Include(x => x.Size).ToList();
+            List<Product> products = _context.Products.Include(x => x.Brand).Include(x => x.Category).Include(x => x.Color).Include(x => x.Ram).Include(x => x.Size).Where(x => x.IsActive == true).ToList();
             return products;
         }
         public List<Product> GetNewestProduct()
         {
-            List<Product> products = _context.Products.Include(x => x.Brand).Include(x => x.Category).Include(x => x.Color).Include(x => x.Ram).Include(x => x.Size).OrderByDescending(x => x.ProductId).Take(6).ToList();
+            List<Product> products = _context.Products.Include(x => x.Brand).Include(x => x.Category).Include(x => x.Color).Include(x => x.Ram).Include(x => x.Size).Where(x => x.IsActive == true).OrderByDescending(x => x.ProductId).Take(6).ToList();
             return products;
         }
 
@@ -29,19 +29,19 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
         {
             List<int?> idProd = _context.Reviews.OrderByDescending(x => x.ReviewDate).GroupBy(x => x.ProductId).Select(n => new { ProductId = n.Key, AverageRating = n.Average(x => x.Rating)})
                 .OrderByDescending(n => n.AverageRating).Take(6).Select(n => n.ProductId).ToList();
-            List<Product> products = _context.Products.Include(x => x.Brand).Include(x => x.Category).Include(x => x.Color).Include(x => x.Ram).Include(x => x.Size).Where(x => idProd.Contains(x.ProductId)).ToList();
+            List<Product> products = _context.Products.Include(x => x.Brand).Include(x => x.Category).Include(x => x.Color).Include(x => x.Ram).Include(x => x.Size).Where(x => idProd.Contains(x.ProductId) && x.IsActive == true).ToList();
             return products;
         }
 
         public Product GetProduct()
         {
-            Product products = _context.Products.FirstOrDefault();
+            Product products = _context.Products.Where(x => x.IsActive == true).FirstOrDefault();
             return products;
         }
 
         public List<Product> SearchProduct(SearchForm searchForm)
         {
-            List<Product> productList = _context.Products.Include(x => x.Size).Include(x => x.Ram).Include(x => x.Category).Include(x => x.Color).Include(x => x.Brand).ToList(); 
+            List<Product> productList = _context.Products.Include(x => x.Size).Include(x => x.Ram).Include(x => x.Category).Include(x => x.Color).Include(x => x.Brand).Where(x => x.IsActive == true).ToList(); 
             var listSearchSize = searchForm.sizeId.Where(x => x != null).ToList();
             var listSearchRam = searchForm.ramId.Where(x => x != null).ToList();
             if (!string.IsNullOrEmpty(searchForm.nameProd))
@@ -81,12 +81,54 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             return productList;
         }
 
+        public List<Product> SearchProductByAdmin(SearchForm searchForm)
+        {
+            List<Product> productList = _context.Products.Include(x => x.Size).Include(x => x.Ram).Include(x => x.Category).Include(x => x.Color).Include(x => x.Brand).ToList();
+            var listSearchSize = searchForm.sizeId.Where(x => x != null).ToList();
+            var listSearchRam = searchForm.ramId.Where(x => x != null).ToList();
+            if (!string.IsNullOrEmpty(searchForm.nameProd))
+            {
+                productList = productList.Where(x => x.ProductName.ToLower().Contains(searchForm.nameProd.ToLower().Trim())).ToList();
+            }
+            if (searchForm.catId != null && searchForm.catId.Count() > 0)
+            {
+                productList = productList.Where(x => searchForm.catId.Contains(x.CategoryId)).ToList();
+            }
+            if (searchForm.colorId != null && searchForm.colorId.Count() > 0)
+            {
+                productList = productList.Where(x => searchForm.colorId.Contains(x.ColorId)).ToList();
+            }
+            if (searchForm.brandId != null && searchForm.brandId.Count() > 0)
+            {
+                productList = productList.Where(x => searchForm.brandId.Contains(x.BrandId)).ToList();
+            }
+            if (listSearchSize != null && listSearchSize.Count() > 0)
+            {
+                productList = productList.Where(x => listSearchSize.Contains(x.SizeId)).ToList();
+            }
+            if (listSearchRam != null && listSearchRam.Count() > 0)
+            {
+                productList = productList.Where(x => listSearchRam.Contains(x.RamId)).ToList();
+            }
+            if (!string.IsNullOrEmpty(searchForm.minPrice))
+            {
+                decimal priceFrom = Convert.ToDecimal(searchForm.minPrice);
+                productList = productList.Where(x => x.UnitSellPrice >= priceFrom).ToList();
+            }
+            if (!string.IsNullOrEmpty(searchForm.maxPrice))
+            {
+                decimal priceTo = Convert.ToDecimal(searchForm.maxPrice);
+                productList = productList.Where(x => x.UnitSellPrice <= priceTo).ToList();
+            }
+            return productList;
+        }
+
         public Product GetProductDetail(int id)
         {
             Product product = _context.Products.Include(x => x.Category)
                 .Include(x => x.Brand).Include(x => x.Reviews)
                 .Include(x => x.Color).Include(x => x.Ram)
-                .Include(x => x.Size).FirstOrDefault(x => x.ProductId == id);
+                .Include(x => x.Size).Where(x => x.IsActive == true).FirstOrDefault(x => x.ProductId == id);
             return product;
         }
 
@@ -116,9 +158,25 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             product.UnitSellPrice = dto.UnitSellPrice;
             product.UnitInStock = dto.UnitInStock;
             product.Description = dto.Description;
+            product.IsActive = true;
             _context.Products.Add(product);
             _context.SaveChanges();
             return product;
+        }
+
+        public Product Hide(ProductDTO dto)
+        {
+            Product product = _context.Products.FirstOrDefault(x => x.ProductId == dto.ProductId);
+            product.IsActive = dto.IsActive;
+            _context.Products.Update(product);
+            _context.SaveChanges();
+            return product;
+        }
+
+        public List<Review> CheckProdHasReview(int prodId)
+        {
+            var reviews = _context.Reviews.Where(x => x.ProductId == prodId).ToList();
+            return reviews;
         }
     }
 }

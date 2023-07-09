@@ -123,6 +123,29 @@ namespace APICalling_Project_PRN231.Controllers
             }
         }
 
+        [HttpPost("SearchByAdmin")]
+        public IActionResult SearchProductByAdmin(SearchForm searchForm)
+        {
+            try
+            {
+                var listProducts = _productRepository.SearchProductByAdmin(searchForm);
+                var product = _mapper.Map<List<ProductDTO>>(listProducts);
+                foreach (var item in product)
+                {
+                    item.AverageStar = _reviewRepository.AverageStarByProdId(item.ProductId);
+                }
+                return Ok(product);
+
+                //var product = ProductRepository.GetProduct();
+                //var mapProd = _mapper.Map<ProductDTO>(product);
+                //return Ok(mapProd);
+            }
+            catch (Exception ex)
+            {
+                return NotFound("Something wrongs");
+            }
+        }
+
         [HttpGet("Detail")]
         public IActionResult GetDetailProduct(int id)
         {
@@ -172,6 +195,37 @@ namespace APICalling_Project_PRN231.Controllers
                 var newProd = _productRepository.Create(product);
                 product.ProductId = newProd.ProductId;
                 return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("Hide")]
+        [Authorize(Roles = "admin")]
+        public IActionResult Hide(ProductDTO product)
+        {
+            try
+            {
+                var prod = _productRepository.Hide(product);
+                product.ProductId = prod.ProductId;
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("CheckProduct")]
+        public IActionResult CheckProd(int prodId)
+        {
+            try
+            {
+                var listReview = _productRepository.CheckProdHasReview(prodId);
+                int countReview = listReview.Count();
+                return Ok(countReview);
             }
             catch (Exception ex)
             {
