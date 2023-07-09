@@ -143,6 +143,7 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             product.UnitInStock = dto.UnitInStock;
             product.Description = dto.Description;
             _context.Products.Update(product);
+            _context.SaveChanges();
         }
 
         public Product Create(ProductDTO dto)
