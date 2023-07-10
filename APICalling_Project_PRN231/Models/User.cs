@@ -15,6 +15,7 @@ namespace APICalling_Project_PRN231.Models
         public string Username { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string? Role { get; set; }
+        public string? Image { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }

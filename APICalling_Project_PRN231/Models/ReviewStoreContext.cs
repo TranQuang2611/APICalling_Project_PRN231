@@ -63,7 +63,9 @@ namespace APICalling_Project_PRN231.Models
 
                 entity.Property(e => e.ColorName).HasMaxLength(100);
 
-                entity.Property(e => e.ColorValue).HasMaxLength(100);
+                entity.Property(e => e.ColorValue)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -177,6 +179,8 @@ namespace APICalling_Project_PRN231.Models
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.Property(e => e.Image).HasMaxLength(200);
 
                 entity.Property(e => e.Password)
                     .HasMaxLength(50)
