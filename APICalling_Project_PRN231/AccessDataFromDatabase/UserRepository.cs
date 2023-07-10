@@ -20,6 +20,7 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             UserDTO result = new UserDTO();
             result.UserId = user.UserId;
             result.Username = user.Username;
+            result.Image = user.Image;
             return result;
         }
 

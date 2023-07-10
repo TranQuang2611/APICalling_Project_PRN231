@@ -34,7 +34,6 @@ namespace APICalling_Project_PRN231.Controllers
             {
                 item.totalComment = _commentRepository.TotalCommentOfReview(item.ReviewId);
                 item.Comments = _commentRepository.GetPagingCommentByReViewId(item.ReviewId);
-                item.User = _userRepository.GetUserById(Convert.ToInt32(item.UserId));
             }
             return Ok(result);
         }

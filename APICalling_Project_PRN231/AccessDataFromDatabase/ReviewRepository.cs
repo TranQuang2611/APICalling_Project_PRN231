@@ -1,5 +1,6 @@
 ﻿using APICalling_Project_PRN231.DTO;
 using APICalling_Project_PRN231.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace APICalling_Project_PRN231.AccessDataFromDatabase
 {
@@ -20,7 +21,7 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 
         public List<Review> GetReviewByProdId(ReviewModel model)
         {
-            var query = _context.Reviews.Where(x => x.ProductId == model.ProductId);
+            var query = _context.Reviews.Include(x => x.User).Where(x => x.ProductId == model.ProductId);
             if(model.Star != 0)
             {
                 query = query.Where(x => x.Rating == model.Star);

@@ -86,7 +86,7 @@ namespace APICalling_Project_PRN231.Controllers
                     {
                         item.AverageStar = _reviewRepository.AverageStarByProdId(item.ProductId);
                     }
-                    return Ok(product);
+                    return Ok(product.OrderByDescending(x => x.AverageStar).ToList());
                 }
                 return NotFound("Not found any product");
 
