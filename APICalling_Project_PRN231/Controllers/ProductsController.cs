@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace APICalling_Project_PRN231.Controllers
 {
@@ -27,22 +28,15 @@ namespace APICalling_Project_PRN231.Controllers
             _reviewRepository = reviewRepository;
         }
 
+        [EnableQuery]
         [HttpGet]
         public IActionResult Get()
         {
             try
             {
                 var listProducts = _productRepository.GetListProduct();
-                if (listProducts.Count > 0)
-                {
-                    var product = _mapper.Map<List<ProductDTO>>(listProducts);
-                    return Ok(product);
-                }
-                return NotFound("Not found any product");
-
-                //var product = ProductRepository.GetProduct();
-                //var mapProd = _mapper.Map<ProductDTO>(product);
-                //return Ok(mapProd);
+                var result = _mapper.Map<List<ProductDTO>>(listProducts);
+                return Ok(result.AsQueryable());
             }
             catch (Exception ex)
             {

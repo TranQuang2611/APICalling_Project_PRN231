@@ -4,19 +4,30 @@ using APICalling_Project_PRN231.DTO;
 using APICalling_Project_PRN231.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddOData(options => options
+        .Select()
+        .Filter()
+        .OrderBy()
+        .SetMaxTop(20)
+        .Count()
+        .Expand()
+    ); 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
+    
 builder.Services.AddDbContextFactory<ReviewStoreContext>(o => o.UseSqlServer("Server=localhost;Database=ReviewStore;user=sa;password=12345678"), ServiceLifetime.Transient);
 
 builder.Services.AddScoped<UserRepository>();
@@ -91,6 +102,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//app.UseMvc(routeBuilder =>
+//{
+//    routeBuilder.EnableDependencyInjection();
+//    routeBuilder.Select().OrderBy().Filter();
+//});
 
 app.UseAuthentication();
 
