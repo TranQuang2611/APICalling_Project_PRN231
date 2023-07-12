@@ -17,6 +17,7 @@ namespace APICalling_Project_PRN231.Models
         public DateTime? ReviewDate { get; set; }
         public int? LikeReact { get; set; }
         public string? Content { get; set; }
+        public bool? IsActive { get; set; }
 
         public virtual Product? Product { get; set; }
         public virtual User? User { get; set; }
