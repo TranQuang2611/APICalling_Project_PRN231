@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace APICalling_Project_PRN231.Controllers
 {
@@ -23,6 +24,19 @@ namespace APICalling_Project_PRN231.Controllers
             _commentRepository = commentRepository;
             _reviewRepository = reviewRepository;
             _userRepository = userRepository;
+        }
+
+        [EnableQuery]
+        [HttpGet("GetAll")]
+        public IActionResult GetAll()
+        {
+            var listReview = _reviewRepository.GetAllReview();
+            var result = _mapper.Map<List<ReviewDTO>>(listReview);
+            foreach (var item in result)
+            {
+                item.Comments = _commentRepository.GetPagingCommentByReViewId(item.ReviewId);
+            }
+            return Ok(result.AsQueryable());
         }
 
         [HttpPost]

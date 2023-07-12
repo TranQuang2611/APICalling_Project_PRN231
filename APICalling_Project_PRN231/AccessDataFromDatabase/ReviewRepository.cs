@@ -42,5 +42,11 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             _context.Reviews.Add(review);
             _context.SaveChanges();
         }
+
+        public IQueryable<Review> GetAllReview()
+        {
+            var query = _context.Reviews.Include(x => x.User);
+            return query;
+        }
     }
 }
