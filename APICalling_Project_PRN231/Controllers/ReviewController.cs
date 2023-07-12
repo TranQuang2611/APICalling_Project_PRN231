@@ -63,6 +63,7 @@ namespace APICalling_Project_PRN231.Controllers
             review.Content = content;
             review.Rating = rating;
             review.LikeReact = 0;
+            review.IsActive = true;
             ReviewDTO reviewDTO = new ReviewDTO();
             try
             {

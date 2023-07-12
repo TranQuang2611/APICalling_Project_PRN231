@@ -11,6 +11,7 @@ namespace APICalling_Project_PRN231.DTO
         public DateTime? ReviewDate { get; set; }
         public int? LikeReact { get; set; }
         public string? Content { get; set; }
+        public bool? IsActive { get; set; }
 
         public UserDTO? User { get; set; }
         public List<CommentDTO> Comments { get; set; }

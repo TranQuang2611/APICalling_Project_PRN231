@@ -15,13 +15,13 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
 
         public decimal AverageStarByProdId(int productId)
         {
-            decimal average = Convert.ToDecimal(_context.Reviews.Where(x => x.ProductId == productId).Average(x => x.Rating));
+            decimal average = Convert.ToDecimal(_context.Reviews.Where(x => x.ProductId == productId && x.IsActive == true).Average(x => x.Rating));
             return decimal.Round(average, 2);
         }
 
         public List<Review> GetReviewByProdId(ReviewModel model)
         {
-            var query = _context.Reviews.Include(x => x.User).Where(x => x.ProductId == model.ProductId);
+            var query = _context.Reviews.Include(x => x.User).Where(x => x.ProductId == model.ProductId && x.IsActive == true);
             if(model.Star != 0)
             {
                 query = query.Where(x => x.Rating == model.Star);
