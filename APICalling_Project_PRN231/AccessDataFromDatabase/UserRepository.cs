@@ -30,5 +30,29 @@ namespace APICalling_Project_PRN231.AccessDataFromDatabase
             return user;
         }
 
+        public User CheckExist(RegisterModel model)
+        {
+            var user = _context.Users.FirstOrDefault(x => x.Username.Trim() == model.UserName);
+            return user;
+        }
+
+        public string Register(RegisterModel model)
+        {
+            string mess = "Tên tài khoản đã tồn tại";
+            var u = _context.Users.FirstOrDefault(x => x.Username == model.UserName.Trim());
+            if(u == null)
+            {
+                mess = "";
+                User user = new User();
+                user.Username = model.UserName.Trim();
+                user.Password = model.Password.Trim();
+                user.Role = "reviewer";
+                user.Image = "/assets/images/review/author-4.jpg";
+                _context.Users.Add(user);
+                _context.SaveChanges();
+            }
+            return mess;
+        }
+
     }
 }

@@ -53,6 +53,36 @@ namespace APICalling_Project_PRN231.Controllers
             }
         }
 
+        [HttpPost("CheckExist")]
+        public IActionResult CheckExist(RegisterModel model)
+        {
+            string mess = "";
+            var user = _userRepository.CheckExist(model);
+            if(user != null)
+            {
+                mess = "Tên tài khoản đã tồn tại";
+            }
+            return Ok(mess);
+
+        }
+
+        [HttpPost("Register")]
+        public IActionResult Register(RegisterModel model)
+        {
+            string mess = "";
+            try
+            {
+               mess =  _userRepository.Register(model);
+            }
+            catch (Exception)
+            {
+                mess = "Có lỗi xảy ra";
+                throw;
+            }
+            return Ok(mess);
+            
+        }
+
         private string GenerateToken(User user)
         {
             var jwtTokenHandle = new JwtSecurityTokenHandler();
